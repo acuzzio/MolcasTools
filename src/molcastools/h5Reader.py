@@ -6,7 +6,6 @@ retrieve_hdf5_keys(path_hdf5)
 retrieve_hdf5_data(path_hdf5, paths_to_prop)
 '''
 
-import numpy as np
 import h5py
 
 def retrieve_hdf5_keys(path_hdf5):

@@ -2,7 +2,6 @@
 First tests suite
 '''
 
-import numpy as np
 from molcastools import retrieve_hdf5_keys, retrieve_hdf5_data
 
 def test_ret_keys():
