@@ -4,6 +4,8 @@ file'''
 from collections import namedtuple
 from argparse import ArgumentParser
 from molcastools import retrieve_hdf5_data
+import pandas as pd
+import numpy as np
 
 def read_arguments(single_inputs):
     '''
@@ -25,15 +27,31 @@ def read_arguments(single_inputs):
 single_inputs = namedtuple("inputs",
         ("h5_file"))
 
+def HartoEv(n):
+    ''' From Hartree to ElectronVolt conversion '''
+    return (n * 27.211402)
+
+def HartoKcal(n):
+    ''' From Hartree to Kcal/mol '''
+    return (n * 627.503)
+
+
 def main():
     '''
-    description
+    from a rasscf h5 file to a pandas table
     '''
     inputs = single_inputs("ciclopropanone.rasscf.h5"   # default input
                           )
     new_inp = read_arguments(inputs)
-    energies = retrieve_hdf5_data(new_inp.h5_file, 'ROOT_ENERGIES')
-    print(energies)
+    ene = retrieve_hdf5_data(new_inp.h5_file, 'ROOT_ENERGIES')
+    nstates = ene.size
+    enezero = ene - (ene[0])
+    indexes = np.arange(nstates)
+    ener = pd.DataFrame([enezero, HartoEv(enezero), HartoKcal(enezero)],
+           index=['Hartree','Ev','kcal/mol'], columns=indexes)
+    print(' ')
+    print(ener.transpose().iloc[::-1])
+    print(' ')
 
 
 if __name__ == "__main__":
